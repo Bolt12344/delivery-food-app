@@ -1,5 +1,22 @@
 const API_BASE_URL = 'https://groceryapp-production-d3fc.up.railway.app/api';
 
+export class Config {
+  private static supabaseUrl: string = import.meta.env.VITE_SUPABASE_URL || '';
+  private static supabaseAnonKey: string = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+  static getSupabaseUrl(): string {
+    return this.supabaseUrl;
+  }
+
+  static getSupabaseAnonKey(): string {
+    return this.supabaseAnonKey;
+  }
+
+  static getApiBaseUrl(): string {
+    return API_BASE_URL;
+  }
+}
+
 export interface LoginRequest {
   identifier: string;
   password: string;
@@ -203,7 +220,7 @@ class ApiService {
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = `${Config.getApiBaseUrl()}${endpoint}`;
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -358,7 +375,7 @@ class ApiService {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_BASE_URL}/upload/image`, {
+    const response = await fetch(`${Config.getApiBaseUrl()}/upload/image`, {
       method: 'POST',
       headers,
       body: formData,
